@@ -71,84 +71,66 @@ const WriteReviewPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 gap-8">
-          <div>
-            <div className="bg-white border rounded-lg shadow-sm p-8">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-16 h-16 bg-orange-100 rounded-lg flex items-center justify-center">
-                  <span className="text-3xl">📝</span>
-                </div>
-                <h2 className="text-2xl font-bold text-gray-900">How was the item?</h2>
+    <div className="min-h-screen bg-white">
+      <div className="max-w-4xl mx-auto px-8 py-16">
+        <div className="space-y-12">
+          {/* Header */}
+          <div className="text-center mb-16">
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center">
+                <span className="text-4xl">📝</span>
               </div>
-
-              {/* Overview Message */}
-              <div className="mb-8">
-                <h3 className="font-semibold text-gray-900 mb-3 text-lg">Overview</h3>
-                <p className="text-gray-600">
-                  Your rating will be automatically generated based on your review text and displayed after submission.
-                </p>
-                {error && <p className="text-red-500 mt-2">{error}</p>}
-              </div>
-
-              {/* Review Title */}
-              {/* <div className="mb-8">
-                <h3 className="font-semibold text-gray-900 mb-3 text-lg">Review Title</h3>
-                <input
-                  type="text"
-                  value={reviewTitle}
-                  onChange={(e) => setReviewTitle(e.target.value)}
-                  placeholder="Summarize your review"
-                  className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                />
-              </div> */}
-
-              {/* Write Review */}
-              <div className="mb-8">
-                <h3 className="font-semibold text-gray-900 mb-3 text-lg">
-                  Write a review <span className="text-red-500">(required)</span>
-                </h3>
-                <textarea
-                  value={reviewText}
-                  onChange={(e) => handleTextChange(e.target.value)}
-                  placeholder="What should other customers know? (At least 5 characters)"
-                  className="w-full h-32 p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                />
-              </div>
-
-              {/* Public Name */}
-              <div className="mb-8">
-                <label className="block font-semibold text-gray-900 mb-3 text-lg">
-                  What's your public name?
-                </label>
-                <input
-                  type="text"
-                  value={publicName}
-                  onChange={(e) => setPublicName(e.target.value)}
-                  defaultValue="anugraha"
-                  className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                />
-              </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-4 px-6 rounded-lg transition-colors shadow-sm"
-              >
-                Submit
-              </button>
-              <button
-                onClick={() => navigate("/")}
-                className="w-full mt-4 px-6 py-4 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
-              >
-                Reviews
-              </button>
+              <h1 className="text-4xl font-bold text-gray-900">How was the item?</h1>
             </div>
+          </div>
+
+          {/* Public Name */}
+          <div className="max-w-2xl mx-auto">
+            <label className="block font-semibold text-gray-900 mb-4 text-xl">
+              What's your public name?
+            </label>
+            <input
+              type="text"
+              value={publicName}
+              onChange={(e) => setPublicName(e.target.value)}
+              defaultValue="anugraha"
+              className="w-full p-5 text-lg border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+            />
+          </div>
+
+          {/* Write Review */}
+          <div className="max-w-2xl mx-auto">
+            <h3 className="font-semibold text-gray-900 mb-4 text-xl">
+              Write a review <span className="text-red-500">(required)</span>
+            </h3>
+            <textarea
+              value={reviewText}
+              onChange={(e) => handleTextChange(e.target.value)}
+              placeholder="What should other customers know? (At least 5 characters)"
+              className="w-full h-40 p-5 text-lg border-2 border-gray-200 rounded-xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+            />
+          </div>
+
+          {/* Submit Buttons */}
+          {/* Submit Buttons */}
+          <div className="max-w-lg mx-auto space-y-2">
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 px-6 text-sm rounded-lg transition-colors shadow-sm"
+            >
+              Submit
+            </button>
+            <button
+              onClick={() => navigate("/")}
+              className="w-full px-6 py-3 text-sm border-2 border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
+            >
+              Reviews
+            </button>
           </div>
         </div>
       </div>
+      
       {/* Pass predictedRating to Popup */}
       <Popup
         open={showPopup}

@@ -253,9 +253,9 @@ const ReviewsPage: React.FC = () => {
               </div>
 
               {/* How are ratings calculated */}
-              {/* <button className="text-blue-600 text-xs hover:underline flex items-center gap-1 mb-6">
+              <button className="text-blue-600 text-xs hover:underline flex items-center gap-1 mb-6">
                 How are ratings calculated? <ChevronDown className="w-3 h-3" />
-              </button> */}
+              </button>
 
               {/* Review this product */}
               <div className="border-t pt-4">
@@ -315,11 +315,12 @@ const ReviewsPage: React.FC = () => {
                   </div>
 
                   {/* Date and Location */}
-                  <p className="text-sm text-gray-600 mb-2">
-                    Reviewed in India on {new Date(review.date).toLocaleDateString('en-GB', { 
-                      day: 'numeric', 
-                      month: 'long', 
-                      year: 'numeric' 
+                  <p className="text-sm text-gray-600 mb-2 text-left">
+                    Reviewed in India on{" "}
+                    {new Date(review.date).toLocaleDateString("en-GB", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
                     })}
                   </p>
 
