@@ -165,7 +165,7 @@ const ReviewsPage: React.FC = () => {
 
   // StarRating component
   const StarRating = ({ rating, size = 'sm' }: { rating: number; size?: 'sm' | 'lg' }) => {
-    const sizeClass = size === 'lg' ? 'w-6 h-6' : 'w-4 h-4';
+    const sizeClass = size === 'lg' ? 'w-4 h-4' : 'w-3 h-3';
     return (
       <div className="flex gap-0.5">
         {[1, 2, 3, 4, 5].map((star) => (
@@ -173,8 +173,8 @@ const ReviewsPage: React.FC = () => {
             key={star}
             className={`${sizeClass} ${
               star <= Math.round(rating)
-                ? 'fill-yellow-400 text-yellow-400'
-                : 'fill-gray-200 text-gray-200'
+                ? 'fill-orange-400 text-orange-400'
+                : 'fill-gray-300 text-gray-300'
             }`}
           />
         ))}
@@ -218,148 +218,140 @@ const ReviewsPage: React.FC = () => {
   }, [reviews, totalReviews]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Customer Reviews</h1>
-          <p className="text-gray-600">Read what our customers are saying about this product</p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Rating Summary */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm border p-6 sticky top-4">
+    <div className="min-h-screen bg-white">
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+          {/* Left Column - Customer Reviews Summary (Smaller) */}
+          <div className="lg:col-span-2">
+            <div className="bg-white">
+              <h2 className="text-xl font-medium text-gray-900 mb-4">Customer reviews</h2>
+              
               {/* Overall Rating */}
-              <div className="text-center mb-6">
-                <div className="text-4xl font-bold text-gray-900 mb-2">{averageRating}</div>
-                <StarRating rating={Math.round(averageRating)} size="lg" />
-                <p className="text-sm text-gray-600 mt-2">Based on {totalReviews} reviews</p>
+              <div className="flex items-center gap-3 mb-4">
+                <StarRating rating={Math.round(averageRating)} />
+                <span className="text-base font-medium">{averageRating} out of 5</span>
               </div>
+              
+              <p className="text-sm text-gray-600 mb-6">{totalReviews} global ratings</p>
 
               {/* Rating Breakdown */}
-              <div className="space-y-3 mb-6">
+              <div className="space-y-2 mb-8">
                 {ratingDistribution.map((item) => (
                   <div key={item.stars} className="flex items-center gap-3">
-                    <div className="flex items-center gap-1 w-12">
-                      <span className="text-sm font-medium">{item.stars}</span>
-                      <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                    </div>
-                    <div className="flex-1 bg-gray-200 h-2 rounded-full overflow-hidden">
+                    <button className="text-sm text-blue-600 hover:underline flex items-center gap-1 min-w-[50px]">
+                      {item.stars} star
+                    </button>
+                    <div className="flex-1 bg-gray-200 h-4 rounded overflow-hidden">
                       <div
-                        className="bg-yellow-400 h-full rounded-full transition-all duration-300"
+                        className="bg-orange-400 h-full transition-all duration-300"
                         style={{ width: `${item.percentage}%` }}
                       />
                     </div>
-                    <span className="text-xs text-gray-600 w-8">{item.count}</span>
+                    <span className="text-sm text-gray-600 min-w-[35px]">{item.percentage}%</span>
                   </div>
                 ))}
               </div>
 
-              {/* Write Review Button */}
-              <button
-                onClick={() => navigate('/write-review')}
-                className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-              >
-                Write a Review
+              {/* How are ratings calculated */}
+              <button className="text-blue-600 text-xs hover:underline flex items-center gap-1 mb-6">
+                How are ratings calculated? <ChevronDown className="w-3 h-3" />
               </button>
 
-              {/* Filter Info */}
-              <div className="mt-4 pt-4 border-t">
-                <button className="text-blue-600 text-sm hover:underline flex items-center gap-1">
-                  How are ratings calculated? <ChevronDown className="w-4 h-4" />
+              {/* Review this product */}
+              <div className="border-t pt-4">
+                <h3 className="text-base font-medium text-gray-900 mb-2">Review this product</h3>
+                <p className="text-xs text-gray-600 mb-3">Share your thoughts with other customers</p>
+                <button
+                  onClick={() => navigate('/write-review')}
+                  className="w-full bg-white border border-gray-300 text-gray-900 py-2 px-4 rounded font-medium hover:bg-gray-50 transition-colors"
+                >
+                  Write a product review
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Right Column - Reviews List */}
-          <div className="lg:col-span-2">
-            {/* Sort */}
-            <div className="bg-white rounded-lg shadow-sm border p-4 mb-6">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <h2 className="text-xl font-semibold text-gray-900">
-                  Reviews ({totalReviews})
-                </h2>
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <label className="text-sm text-gray-600">Sort by:</label>
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value as 'newest' | 'oldest' | 'highest' | 'lowest' | 'helpful')}
-                      className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="newest">Newest First</option>
-                      <option value="oldest">Oldest First</option>
-                      <option value="highest">Highest Rating</option>
-                      <option value="lowest">Lowest Rating</option>
-                      <option value="helpful">Most Helpful</option>
-                    </select>
-                  </div>
-                </div>
+          {/* Right Column - Top Reviews (Bigger) */}
+          <div className="lg:col-span-3">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+              <h3 className="text-lg font-medium text-gray-900">Top reviews from India</h3>
+              <div className="flex items-center gap-2">
+                <label className="text-sm text-gray-600">Sort by:</label>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as 'newest' | 'oldest' | 'highest' | 'lowest' | 'helpful')}
+                  className="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <option value="newest">Newest First</option>
+                  <option value="oldest">Oldest First</option>
+                  <option value="highest">Highest Rating</option>
+                  <option value="lowest">Lowest Rating</option>
+                  <option value="helpful">Most Helpful</option>
+                </select>
               </div>
             </div>
 
             {/* Reviews */}
-            <div className="space-y-4">
+            <div className="space-y-6">
               {loading && <p className="text-gray-600 text-center">Loading reviews...</p>}
               {error && <p className="text-red-500 text-center mb-4">{error}</p>}
               {sortedReviews.length === 0 && !loading && !error && (
                 <p className="text-gray-600 text-center">No reviews found.</p>
               )}
               {sortedReviews.slice(0, visibleCount).map((review) => (
-                <div key={review.id} className="bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow">
+                <div key={review.id} className="pb-6 border-b border-gray-200 last:border-b-0">
                   {/* Review Header */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
-                        <User className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-gray-900">{review.author}</h3>
-                        <div className="flex items-center gap-2">
-                          <StarRating rating={review.predicted_rating} />
-                          <span className="text-sm text-gray-500">•</span>
-                          <span className="text-sm text-gray-500">{review.date}</span>
-                        </div>
-                      </div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center">
+                      <User className="w-4 h-4 text-white" />
                     </div>
-                    {review.verified && (
-                      <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-full">
-                        Verified Purchase
-                      </span>
-                    )}
+                    <span className="font-medium text-gray-900">{review.author}</span>
                   </div>
+
+                  {/* Rating and Title */}
+                  <div className="flex items-center gap-2 mb-2">
+                    <StarRating rating={review.predicted_rating} />
+                    <span className="font-medium text-gray-900">{review.title}</span>
+                  </div>
+
+                  {/* Date and Location */}
+                  <p className="text-sm text-gray-600 mb-2">
+                    Reviewed in India on {new Date(review.date).toLocaleDateString('en-GB', { 
+                      day: 'numeric', 
+                      month: 'long', 
+                      year: 'numeric' 
+                    })}
+                  </p>
+
+                  {/* Verified Purchase */}
+                  {review.verified && (
+                    <p className="text-sm text-orange-600 font-medium mb-3">Verified Purchase</p>
+                  )}
 
                   {/* Review Content */}
-                  <div className="mb-4">
-                    <h4 className="font-semibold text-gray-900 mb-2">{review.title}</h4>
-                    <p className="text-gray-700 leading-relaxed">{review.content}</p>
-                  </div>
+                  <p className="text-gray-900 mb-4 leading-relaxed">{review.content}</p>
 
-                  {/* Review Actions */}
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-4">
                     <button 
                       onClick={() => handleHelpful(review.id)}
-                      className={`flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                      className={`px-4 py-1 text-sm border rounded transition-colors ${
                         likedReviews.has(review.id)
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'text-gray-600 hover:bg-gray-100'
+                          ? 'border-orange-400 bg-orange-50 text-orange-700'
+                          : 'border-gray-300 text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      <ThumbsUp className={`w-4 h-4 ${likedReviews.has(review.id) ? 'fill-current' : ''}`} />
-                      Helpful ({review.helpful || 0})
+                      Helpful
                     </button>
                     <button 
                       onClick={() => handleReport(review.id)}
-                      className={`flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                      className={`px-4 py-1 text-sm border rounded transition-colors ${
                         reportedReviews.has(review.id)
-                          ? 'bg-red-100 text-red-700'
-                          : 'text-gray-500 hover:text-red-600 hover:bg-red-50'
+                          ? 'border-red-400 bg-red-50 text-red-700'
+                          : 'border-gray-300 text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      <Flag className={`w-4 h-4 ${reportedReviews.has(review.id) ? 'fill-current' : ''}`} />
-                      {reportedReviews.has(review.id) ? 'Reported' : 'Report'}
+                      Report
                     </button>
                   </div>
                 </div>
@@ -371,7 +363,7 @@ const ReviewsPage: React.FC = () => {
               {visibleCount < sortedReviews.length && (
                 <button
                   onClick={loadMore}
-                  className="bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                  className="bg-white border border-gray-300 text-gray-700 px-6 py-2 rounded font-medium hover:bg-gray-50 transition-colors"
                 >
                   Load More Reviews ({sortedReviews.length - visibleCount} remaining)
                 </button>
