@@ -253,9 +253,9 @@ const ReviewsPage: React.FC = () => {
               </div>
 
               {/* How are ratings calculated */}
-              <button className="text-blue-600 text-xs hover:underline flex items-center gap-1 mb-6">
+              {/* <button className="text-blue-600 text-xs hover:underline flex items-center gap-1 mb-6">
                 How are ratings calculated? <ChevronDown className="w-3 h-3" />
-              </button>
+              </button> */}
 
               {/* Review this product */}
               <div className="border-t pt-4">
@@ -274,7 +274,7 @@ const ReviewsPage: React.FC = () => {
           {/* Right Column - Top Reviews (Bigger) */}
           <div className="lg:col-span-3">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-              <h3 className="text-lg font-medium text-gray-900">Top reviews from India</h3>
+              <div></div>
               <div className="flex items-center gap-2">
                 <label className="text-sm text-gray-600">Sort by:</label>
                 <select
@@ -325,11 +325,11 @@ const ReviewsPage: React.FC = () => {
 
                   {/* Verified Purchase */}
                   {review.verified && (
-                    <p className="text-sm text-orange-600 font-medium mb-3">Verified Purchase</p>
+                    <p className="text-sm text-orange-600 font-medium mb-3 text-left">Verified Purchase</p>
                   )}
 
                   {/* Review Content */}
-                  <p className="text-gray-900 mb-4 leading-relaxed">{review.content}</p>
+                  <p className="text-gray-900 mb-4 leading-relaxed text-left">{review.content}</p>
 
                   {/* Action Buttons */}
                   <div className="flex items-center gap-4">
