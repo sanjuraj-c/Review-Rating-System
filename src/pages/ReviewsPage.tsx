@@ -6,51 +6,7 @@ import { Review } from '../types';
 
 // Static mock reviews (consistent with api.ts)
 const mockReviews: Review[] = [
-  // {
-  //   id: '1',
-  //   productId: '1',
-  //   userId: 'user1',
-  //   author: 'Kushal Kumar',
-  //   userName: 'kushal',
-  //   predicted_rating: 5,
-  //   title: 'Excellent quality and fast delivery',
-  //   content: 'Amazing product with great build quality. The shipping was incredibly fast and the packaging was perfect. Highly recommended!',
-  //   date: '2024-03-15',
-  //   verified: true,
-  //   helpful: 12,
-  //   reported: 0,
-  //   location: 'Mumbai, India'
-  // },
-  // {
-  //   id: '2',
-  //   productId: '1',
-  //   userId: 'user2',
-  //   author: 'Priya Sharma',
-  //   userName: 'priya',
-  //   predicted_rating: 4,
-  //   title: 'Good value for money',
-  //   content: 'Pretty good product overall. There are some minor issues but nothing major. The price point makes it worth buying.',
-  //   date: '2024-03-12',
-  //   verified: true,
-  //   helpful: 8,
-  //   reported: 0,
-  //   location: 'Delhi, India'
-  // },
-  // {
-  //   id: '3',
-  //   productId: '1',
-  //   userId: 'user3',
-  //   author: 'Amit Singh',
-  //   userName: 'amit',
-  //   predicted_rating: 5,
-  //   title: 'Outstanding performance!',
-  //   content: 'This product exceeded my expectations. The features work flawlessly and the design is beautiful. Will definitely buy again.',
-  //   date: '2024-03-10',
-  //   verified: true,
-  //   helpful: 15,
-  //   reported: 0,
-  //   location: 'Bangalore, India'
-  // }
+  // same mock reviews as before
 ];
 
 const ReviewsPage: React.FC = () => {
@@ -220,9 +176,9 @@ const ReviewsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-          {/* Left Column - Customer Reviews Summary (Smaller) */}
-          <div className="lg:col-span-2">
+        <div className="flex flex-col lg:flex-row gap-12">
+          {/* Left Column - Customer Reviews Summary (Smaller with fixed width) */}
+          <div className="lg:w-80 flex-shrink-0">
             <div className="bg-white">
               <h2 className="text-xl font-medium text-gray-900 mb-4">Customer reviews</h2>
               
@@ -252,11 +208,6 @@ const ReviewsPage: React.FC = () => {
                 ))}
               </div>
 
-              {/* How are ratings calculated */}
-              <button className="text-blue-600 text-xs hover:underline flex items-center gap-1 mb-6">
-                How are ratings calculated? <ChevronDown className="w-3 h-3" />
-              </button>
-
               {/* Review this product */}
               <div className="border-t pt-4">
                 <h3 className="text-base font-medium text-gray-900 mb-2">Review this product</h3>
@@ -271,8 +222,8 @@ const ReviewsPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column - Top Reviews (Bigger) */}
-          <div className="lg:col-span-3">
+          {/* Right Column - Top Reviews (Flexible width) */}
+          <div className="flex-1">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
               <div></div>
               <div className="flex items-center gap-2">
@@ -316,7 +267,7 @@ const ReviewsPage: React.FC = () => {
 
                   {/* Date and Location */}
                   <p className="text-sm text-gray-600 mb-2 text-left">
-                    Reviewed in India on{" "}
+                    Reviewed on{" "}
                     {new Date(review.date).toLocaleDateString("en-GB", {
                       day: "numeric",
                       month: "long",

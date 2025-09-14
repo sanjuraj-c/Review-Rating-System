@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Camera } from 'lucide-react';
-import Popup from '../components/PopupExample'; // Ensure this points to the correct Popup component
 import { useNavigate } from 'react-router-dom';
+import Popup from '../components/PopupExample';
 import { apiService } from '../services/api';
 import { ReviewFormData } from '../types';
 
@@ -13,9 +12,9 @@ const WriteReviewPage: React.FC = () => {
   const [predictedRating, setPredictedRating] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const productId = '1'; // Assuming product ID is fixed or passed via props
+  const productId = '1'; // Replace with actual product ID
 
-  // Mock function to simulate predicted rating based on text length
+  // Mock function for predicted rating
   const getMockPredictedRating = (text: string): number => {
     const length = text.trim().length;
     if (length < 20) return 3;
@@ -24,7 +23,6 @@ const WriteReviewPage: React.FC = () => {
     return 4.5;
   };
 
-  // Update mock rating when review text changes
   const handleTextChange = (text: string) => {
     setReviewText(text);
     if (text.trim() && text.length >= 5) {
@@ -37,12 +35,38 @@ const WriteReviewPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!reviewText.trim()) {
+    const text = reviewText.trim();
+
+    // Regex checks
+    const onlyNumbers = /^[0-9]+$/;
+    const onlySpecials = /^[^a-zA-Z0-9]+$/;
+    const meaningless = /^(.)\1{4,}$/;
+
+    // Small dictionary of common words
+    const dictionary = new Set([
+      'good', 'bad', 'excellent', 'poor', 'amazing', 'quality', 'product',
+      'item', 'useful', 'worth', 'recommend', 'happy', 'satisfied',
+      'great', 'nice', 'love', 'like', 'dislike', 'okay', 'awesome',
+      'super', 'cute', 'option', 'strap', 'year', 'old', 'adjust'
+    ]);
+
+    // Tokenize
+    const words = text.toLowerCase().split(/\s+/).filter(Boolean);
+    const knownWords = words.filter(w => dictionary.has(w));
+
+    // Updated gibberish rule: reject only if no real words at all
+    const gibberish = knownWords.length === 0;
+
+    if (!text) {
       setError('Review text is required');
       return;
     }
-    if (reviewText.length < 5) {
+    if (text.length < 5) {
       setError('Review text must be at least 5 characters long');
+      return;
+    }
+    if (onlyNumbers.test(text) || onlySpecials.test(text) || meaningless.test(text) || gibberish) {
+      setError('Invalid input');
       return;
     }
 
@@ -50,14 +74,14 @@ const WriteReviewPage: React.FC = () => {
       authorName: publicName || '',
       content: reviewText,
       title: reviewTitle || 'Review',
-      rating: predictedRating || 3, // Use predicted rating
+      rating: predictedRating || 3,
     };
 
     try {
       const response = await apiService.submitReview(productId, reviewData);
       if (response.success && response.data?.review) {
         setShowPopup(true);
-        setPredictedRating(response.data.review.predicted_rating || predictedRating || 3); // Use backend rating or fallback
+        setPredictedRating(response.data.review.predicted_rating || predictedRating || 3);
         setReviewText('');
         setReviewTitle('');
         setPublicName('');
@@ -93,7 +117,6 @@ const WriteReviewPage: React.FC = () => {
               type="text"
               value={publicName}
               onChange={(e) => setPublicName(e.target.value)}
-              defaultValue="anugraha"
               className="w-full p-5 text-lg border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
             />
           </div>
@@ -109,9 +132,9 @@ const WriteReviewPage: React.FC = () => {
               placeholder="What should other customers know? (At least 5 characters)"
               className="w-full h-40 p-5 text-lg border-2 border-gray-200 rounded-xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
             />
+            {error && <p className="text-red-500 mt-2">{error}</p>}
           </div>
 
-          {/* Submit Buttons */}
           {/* Submit Buttons */}
           <div className="max-w-lg mx-auto space-y-2">
             <button
@@ -130,12 +153,12 @@ const WriteReviewPage: React.FC = () => {
           </div>
         </div>
       </div>
-      
-      {/* Pass predictedRating to Popup */}
+
+      {/* Popup */}
       <Popup
         open={showPopup}
         onClose={() => setShowPopup(false)}
-        predictedRating={predictedRating || 3} // Fallback to 3 if null
+        predictedRating={predictedRating || 3}
       />
     </div>
   );
